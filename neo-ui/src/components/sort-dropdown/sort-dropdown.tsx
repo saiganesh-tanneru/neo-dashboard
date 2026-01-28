@@ -1,43 +1,48 @@
-import React from 'react';
-import { SORT_OPTIONS } from '../app-constants';
-import './sort-dropdown.module.scss';
+import React, { memo } from 'react'
+import { SORT_OPTIONS } from '../app-constants'
+import './sort-dropdown.module.scss'
+import { SortBy } from '../../models/neoModel'
 
-type SortOption = {
-    value: string;
-    label: string;
-};
-
-interface SortDropdownProps {
-    options: SortOption[];
-    onSelect: (option: string) => void;
+export type SortOption = {
+    value: string
+    label: string
 }
 
-const SortDropdownComponent: React.FC<SortDropdownProps> = ({ options, onSelect }) => {
+type Props = {
+    options?: SortOption[]
+    value?: SortBy 
+    onSelect?: (value: string) => void
+    className?: string
+}
+
+const SortDropdown: React.FC<Props> = ({
+    options = SORT_OPTIONS,
+    value,
+    onSelect,
+}) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        onSelect?.(e.target.value)
+    }
+
     return (
-        <div className="sort-dropdown">
+        <div style={{
+            display: 'flex'
+        }}>
+            <p>Sort:</p>
             <select
                 className="sort-select"
-                onChange={(e) => onSelect(e.target.value)}
+                value={value}
+                onChange={handleChange}
                 aria-label="Sort options"
             >
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
+                {options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
                     </option>
                 ))}
             </select>
         </div>
-    );
-};
+    )
+}
 
-const SortDropdown: React.FC = () => {
-    const handleSelect = (option: string) => {
-        console.log('Selected option:', option);
-    };
-
-    return (
-            <SortDropdownComponent options={SORT_OPTIONS} onSelect={handleSelect} />
-    );
-};
-
-export default SortDropdown;
+export default memo(SortDropdown)

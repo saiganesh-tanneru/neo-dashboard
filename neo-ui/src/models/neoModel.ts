@@ -17,3 +17,10 @@ export type NeoItem = {
         missDistanceKm: number;
     };
 };
+
+export enum SortBy {
+  Name = 'name',
+  Size = 'size',
+  ClosenessToEarth = 'closenessToEarth',
+  RelativeVelocity = 'relativeVelocity',
+}

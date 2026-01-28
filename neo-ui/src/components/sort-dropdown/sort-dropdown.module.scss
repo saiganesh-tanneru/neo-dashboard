@@ -1,8 +1,4 @@
-/* Styles for SortDropdown component — exported globally so the
-   component's className strings match without changing TSX imports. */
-
 :global(.sort-dropdown) {
-  display: inline-block;
   min-width: 120px;
   max-width: 320px;
 }
@@ -20,6 +16,7 @@
   -moz-appearance: none;
   cursor: pointer;
   transition: box-shadow 0.12s ease, border-color 0.12s ease;
+  margin-left: 12px;
 }
 
 :global(.sort-select:focus) {

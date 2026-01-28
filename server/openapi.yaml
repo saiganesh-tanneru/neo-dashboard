@@ -1,0 +1,233 @@
+openapi: 3.0.3
+info:
+  title: Neo Dashboard API
+  description: API that proxies and normalizes NASA NEO feed into a UI-friendly model.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+paths:
+  /:
+    get:
+      summary: Fetch near-earth objects (modeled)
+      description: |
+        Returns a normalized list of near-earth objects (NEOs) for the requested date range.
+        This endpoint proxies NASA's NEO Feed and returns a simplified model.
+      parameters:
+        - name: start_date
+          in: query
+          description: |
+            Start date (inclusive) in `YYYY-MM-DD` format.
+            The API accepts a maximum range of 7 days (end_date - start_date <= 7).
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-01-01"
+        - name: end_date
+          in: query
+          description: |
+            End date (inclusive) in `YYYY-MM-DD` format.
+            The API accepts a maximum range of 7 days (end_date - start_date <= 7).
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2026-01-05"
+      responses:
+        "200":
+          description: Modeled NEO feed response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NeoModelResult"
+              examples:
+                sample:
+                  summary: Sample response
+                  value:
+                    range:
+                      startDate: "2026-01-01"
+                      endDate: "2026-01-01"
+                    count: 2
+                    items:
+                      - id: "12345"
+                        name: "2011 GE3"
+                        date: "2026-01-01"
+                        nasaJplUrl: "https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=12345"
+                        isPotentiallyHazardous: false
+                        isSentryObject: false
+                        estimatedDiameterKm:
+                          min: 0.12
+                          max: 0.27
+                        closeApproach:
+                          date: "2026-01-01"
+                          dateFull: "2026-Jan-01 12:34"
+                          orbitingBody: "Earth"
+                          relativeVelocityKph: 54321.12
+                          missDistanceKm: 450000.5
+                      - id: "67890"
+                        name: "2026 AB"
+                        date: "2026-01-01"
+                        nasaJplUrl: "https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=67890"
+                        isPotentiallyHazardous: true
+                        isSentryObject: false
+                        estimatedDiameterKm:
+                          min: 0.5
+                          max: 1.1
+                        closeApproach: null
+        "400":
+          description: Bad Request (invalid query parameter)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                invalid-format:
+                  summary: Invalid date format
+                  value:
+                    error: "Invalid date format"
+                    message: "start_date and end_date must be in YYYY-MM-DD format"
+                invalid-range:
+                  summary: Start date after end date
+                  value:
+                    error: "Invalid date range"
+                    message: "start_date must be on or before end_date"
+                range-too-large:
+                  summary: Range exceeds maximum
+                  value:
+                    error: "Date range too large"
+                    message: "maximum range is 7 days"
+        "502":
+          description: Upstream (NASA) error proxied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    NeoModelResult:
+      type: object
+      properties:
+        range:
+          $ref: "#/components/schemas/Range"
+        count:
+          type: integer
+          description: Total number of items returned
+          example: 42
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/NeoItem"
+      required:
+        - range
+        - count
+        - items
+    Range:
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          nullable: true
+          example: "2026-01-01"
+        endDate:
+          type: string
+          format: date
+          nullable: true
+          example: "2026-01-05"
+      required:
+        - startDate
+        - endDate
+    NeoItem:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+          example: "3542519"
+        name:
+          type: string
+          nullable: true
+          example: "2011 GE3"
+        date:
+          type: string
+          format: date
+          example: "2026-01-01"
+        nasaJplUrl:
+          type: string
+          format: uri
+          nullable: true
+        isPotentiallyHazardous:
+          type: boolean
+        isSentryObject:
+          type: boolean
+        estimatedDiameterKm:
+          $ref: "#/components/schemas/EstimatedDiameterKm"
+        closeApproach:
+          $ref: "#/components/schemas/CloseApproach"
+      required:
+        - date
+        - estimatedDiameterKm
+    EstimatedDiameterKm:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+          nullable: true
+          example: 0.12
+        max:
+          type: number
+          format: double
+          nullable: true
+          example: 0.27
+      required:
+        - min
+        - max
+    CloseApproach:
+      type: object
+      nullable: true
+      properties:
+        date:
+          type: string
+          format: date
+          example: "2026-01-01"
+        dateFull:
+          type: string
+          nullable: true
+          example: "2026-Jan-01 12:34"
+        orbitingBody:
+          type: string
+          nullable: true
+        relativeVelocityKph:
+          type: number
+          format: double
+          nullable: true
+        missDistanceKm:
+          type: number
+          format: double
+          nullable: true
+      required:
+        - date
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "NASA API request failed"
+        message:
+          type: string
+          nullable: true
+          example: "start_date must be on or before end_date"
+        status:
+          type: integer
+          example: 502
+      required:
+        - error
+        - status

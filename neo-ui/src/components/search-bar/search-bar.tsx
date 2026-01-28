@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import './search-bar.module.scss';
-import SortDropdown from '../sort-dropdown/sort-dropdown';
-import { CustomDatePicker } from '../custom-datepicker/custom-datepicker';
 
 interface SearchBarProps {
+    value?: string;
     placeholder?: string;
     onSearch?: (query: string) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ 
+    value="",
     placeholder = 'Search...', 
     onSearch 
 }) => {
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(value);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -27,29 +27,26 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
     return (
         <div style={{
-            display: 'flex',
-            marginBottom: '1rem',
+            margin: '1rem 0rem',
         }}>
-            <CustomDatePicker />
-            <div className="search-bar">
-                <SortDropdown/>
-                <input
-                    type="text"
-                    value={query}
-                    onChange={handleChange}
-                    placeholder={placeholder}
-                    className="search-input"
-                />
-                {query && (
-                    <button 
-                        onClick={handleClear}
-                        className="clear-button"
-                        aria-label="Clear search"
-                    >
-                        ✕
-                    </button>
-                )}
-            </div>
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        className="search-input"
+                    />
+                    {query && (
+                        <button 
+                            onClick={handleClear}
+                            className="clear-button"
+                            aria-label="Clear search"
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
         </div>
     );
 };

@@ -1,51 +1,48 @@
 import React, { useState } from 'react';
 import './custom-datepicker.module.scss';
 
-interface DateRange {
-    startDate: Date | null;
-    endDate: Date | null;
+interface DateSelection {
+    date: Date | null;
 }
 
-export const CustomDatePicker: React.FC = () => {
-    const [dateRange, setDateRange] = useState<DateRange>({
-        startDate: null,
-        endDate: null,
-    });
+interface CustomDatePickerProps {
+    onSubmit?: (date: Date | null) => void;
+    label?: string;
+}
 
-    const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDateRange({
-            ...dateRange,
-            startDate: e.target.value ? new Date(e.target.value) : null,
-        });
-    };
+export const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ onSubmit, label = 'Date' }) => {
+    const [selection, setSelection] = useState<DateSelection>({
+        date: null,
+    })
 
-    const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDateRange({
-            ...dateRange,
-            endDate: e.target.value ? new Date(e.target.value) : null,
-        });
-    };
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelection({
+            date: e.target.value ? new Date(e.target.value) : null,
+        })
+    }
 
     return (
         <div className="date-range-picker">
             <div className="date-input-group">
-                <label style={{fontSize: 12}}  htmlFor="start-date">Start Date</label>
+                <label style={{ fontSize: 12 }} htmlFor="date-input">{label}</label>
                 <input
-                    id="start-date"
+                    id="date-input"
                     type="date"
-                    value={dateRange.startDate?.toISOString().split('T')[0] || ''}
-                    onChange={handleStartDateChange}
+                    value={selection.date?.toISOString().split('T')[0] || ''}
+                    onChange={handleDateChange}
                 />
             </div>
-            <div className="date-input-group">
-                <label htmlFor="end-date">End Date</label>
-                <input
-                    id="end-date"
-                    type="date"
-                    value={dateRange.endDate?.toISOString().split('T')[0] || ''}
-                    onChange={handleEndDateChange}
-                />
+
+            <div className="date-range-actions">
+                <button
+                    type="button"
+                    className="date-submit-button"
+                    onClick={() => onSubmit?.(selection.date)}
+                    disabled={!selection.date}
+                >
+                    Submit
+                </button>
             </div>
         </div>
-    );
-};
+    )
+}
