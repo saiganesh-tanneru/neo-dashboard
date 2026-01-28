@@ -1,15 +1,8 @@
-/* SearchBar component styles (CSS Module)
-	 The component currently uses plain className strings, so these
-	 selectors are exposed using :global to avoid changing the TSX file.
-	 If you'd rather switch to CSS-module usage inside the component,
-	 I can update the component to `import styles from './search-bar.module.scss'`
-	 and use `className={styles.searchBar}` instead. */
-
 :global(.search-bar) {
 	position: relative;
 	display: flex;
 	align-items: center;
-	// width: 100%;
+	width: 100%;
 	max-width: 640px;
 	background: #ffffff;
 	border: 1px solid #e6e7eb;
@@ -29,7 +22,7 @@
 	border: none;
 	background: transparent;
 	padding: 10px 12px;
-	padding-right: 44px; /* space for clear button */
+	padding-right: 44px;
 	font-size: 1rem;
 	color: #111827;
 	outline: none;

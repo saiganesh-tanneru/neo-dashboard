@@ -29,7 +29,7 @@ export const CustomDatePicker: React.FC = () => {
     return (
         <div className="date-range-picker">
             <div className="date-input-group">
-                <label htmlFor="start-date">Start Date</label>
+                <label style={{fontSize: 12}}  htmlFor="start-date">Start Date</label>
                 <input
                     id="start-date"
                     type="date"

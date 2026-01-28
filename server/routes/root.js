@@ -3,7 +3,7 @@
 const { toNeoModel } = require('../helper/neoModel')
 
 // NOTE: For best practice, move the API key to an env var (NASA_API_KEY) and avoid committing it.
-const NASA_API_KEY = process.env.NASA_API_KEY || 'aDNpoYJGkPbqvgbWwiFx8MPy5fsqz6qpc7CmrUzb'
+const NEO_API_KEY = process.env.NEO_API_KEY || 'aDNpoYJGkPbqvgbWwiFx8MPy5fsqz6qpc7CmrUzb'
 
 module.exports = async function (fastify, opts) {
   fastify.get('/', async function (request, reply) {

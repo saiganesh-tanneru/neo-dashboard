@@ -1,15 +1,31 @@
 import React from 'react';
 import './neo-card.module.scss';
+import { NeoItem } from '../../models/neoModel';
 
 interface NearEarthObject {
-    name: string;
-    size: number;
-    closenessToEarth: number;
-    relativeVelocity: number;
+    name: string;  
 }
 
 interface NeoCardProps {
-    data: NearEarthObject;
+    data: NeoItem;
+}
+
+const GetSize = (neo: NeoItem): number| String => {
+    const diameter = neo.estimatedDiameterKm
+    if (diameter?.min != null && diameter?.max != null) {
+        return( (diameter.min + diameter.max) / 2).toFixed(2)
+    }
+    return "N/A";
+}
+
+const GetRelativeVelocity = (neo: NeoItem): any => {
+    const velocityKph = neo.closeApproach?.relativeVelocityKph
+    return velocityKph != null ? velocityKph / 3600 : "N/A"
+}
+
+const GetClosenessToEarth = (neo: NeoItem): any => {
+    const missDistanceKm = neo.closeApproach?.missDistanceKm
+    return missDistanceKm != null ? missDistanceKm.toFixed(2) : "N/A"
 }
 
 export const NeoCard: React.FC<NeoCardProps> = ({ data }) => {
@@ -21,15 +37,15 @@ export const NeoCard: React.FC<NeoCardProps> = ({ data }) => {
             <div className="neo-card-content">
                 <div className="neo-card-field">
                     <span className="label">Size:</span>
-                    <span className="value">{data.size.toFixed(2)} km</span>
+                    <span className="value">{GetSize(data)} km</span>
                 </div>
                 <div className="neo-card-field">
                     <span className="label">Closeness to Earth:</span>
-                    <span className="value">{data.closenessToEarth.toFixed(2)} km</span>
+                    <span className="value">{GetClosenessToEarth(data)} km</span>
                 </div>
                 <div className="neo-card-field">
                     <span className="label">Relative Velocity:</span>
-                    <span className="value">{data.relativeVelocity.toFixed(2)} km/s</span>
+                    <span className="value">{GetRelativeVelocity(data)} km/s</span>
                 </div>
             </div>
         </div>

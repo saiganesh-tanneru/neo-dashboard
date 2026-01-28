@@ -26,27 +26,30 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     };
 
     return (
-        <>
-        <CustomDatePicker />
-        <div className="search-bar">
-            <SortDropdown/>
-            <input
-                type="text"
-                value={query}
-                onChange={handleChange}
-                placeholder={placeholder}
-                className="search-input"
-            />
-            {query && (
-                <button 
-                    onClick={handleClear}
-                    className="clear-button"
-                    aria-label="Clear search"
-                >
-                    ✕
-                </button>
-            )}
+        <div style={{
+            display: 'flex',
+            marginBottom: '1rem',
+        }}>
+            <CustomDatePicker />
+            <div className="search-bar">
+                <SortDropdown/>
+                <input
+                    type="text"
+                    value={query}
+                    onChange={handleChange}
+                    placeholder={placeholder}
+                    className="search-input"
+                />
+                {query && (
+                    <button 
+                        onClick={handleClear}
+                        className="clear-button"
+                        aria-label="Clear search"
+                    >
+                        ✕
+                    </button>
+                )}
+            </div>
         </div>
-        </>
     );
 };

@@ -2,30 +2,31 @@ import React, { useEffect } from 'react';
 import './App.css';
 import { NeoCard } from './components/neo-card/neo-card';
 import { SearchBar } from './components/search-bar/search-bar';
-import { CustomDatePicker } from './components/custom-datepicker/custom-datepicker';
-import SortDropdown from './components/sort-dropdown/sort-dropdown';
 import useFetch from './hooks/useFetch';
 
 function App() {
-  const { data: status, loading, error } = useFetch<Record<string, any>>('http://localhost:3000/')
+  const { data: neoData, loading, error } = useFetch('http://localhost:3000/')
 
   useEffect(() => {
     if (loading) return
     if (error) console.error('Error fetching status:', error)
-    if (status) console.log('Server status:', status)
-  }, [status, loading, error])
-
-  const data = {
-    name: '2023 AB',
-    size: 123,
-    closenessToEarth: 456,
-    relativeVelocity: 789
-  }
+    if (neoData) {
+      
+    }
+  }, [neoData, loading, error])
 
   return (
     <div className="App">
       <SearchBar />
-      <NeoCard data={data} />
+      {neoData != null && neoData.items?.length > 0 && 
+        neoData?.items?.map((neo: any) => (
+          <NeoCard 
+            key={neo.name}
+            data={neo}
+          />
+        ))
+      }
+      
     </div>
   )
 }
