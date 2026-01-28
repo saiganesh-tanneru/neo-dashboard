@@ -1,10 +1,15 @@
+require('dotenv').config()
 const { toNeoModel } = require('../helper/neoModel')
 const NodeCache = require('node-cache')
 
 // Cache with 10 min TTL, check expired keys every 2 min
 const neoCache = new NodeCache({ stdTTL: 600, checkperiod: 120 })
 
-const NEO_API_KEY = process.env.NEO_API_KEY || 'DEMO_KEY'
+const NEO_API_KEY = process.env.NASA_API_KEY
+
+if (!NEO_API_KEY) {
+  throw new Error('NASA_API_KEY is missing. Define it in your .env file')
+}
 
 module.exports = async function (fastify, opts) {
   fastify.get('/', async function (request, reply) {
