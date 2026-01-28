@@ -1,0 +1,37 @@
+/* Styles for SortDropdown component — exported globally so the
+   component's className strings match without changing TSX imports. */
+
+:global(.sort-dropdown) {
+  display: inline-block;
+  min-width: 120px;
+  max-width: 320px;
+}
+
+:global(.sort-select) {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  color: #111827;
+  background: #ffffff;
+  border: 1px solid #e6e7eb;
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+:global(.sort-select:focus) {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.08);
+}
+
+:global(.sort-select option) {
+  color: #111827;
+}
+
+:global(.sort-dropdown.small) {
+  min-width: 160px;
+}

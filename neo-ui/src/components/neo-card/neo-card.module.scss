@@ -1,0 +1,63 @@
+
+
+/* Expose global kebab-case classnames the components use
+     so plain `className="neo-card"` etc. pick up the styles
+     without changing the TSX files. */
+:global(.neo-card) {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    transition: box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+:global(.neo-card:hover) {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+:global(.neo-card-header) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+:global(.neo-card-title) {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+:global(.neo-card-content) {
+    flex: 1;
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+:global(.neo-card-field) {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+:global(.label) {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+:global(.value) {
+    color: #111827;
+    font-weight: 700;
+}
+
+:global(.neo-card-footer) {
+    margin-top: 1rem;
+    text-align: right;
+}

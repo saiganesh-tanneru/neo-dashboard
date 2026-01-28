@@ -1,0 +1,78 @@
+/* SearchBar component styles (CSS Module)
+	 The component currently uses plain className strings, so these
+	 selectors are exposed using :global to avoid changing the TSX file.
+	 If you'd rather switch to CSS-module usage inside the component,
+	 I can update the component to `import styles from './search-bar.module.scss'`
+	 and use `className={styles.searchBar}` instead. */
+
+:global(.search-bar) {
+	position: relative;
+	display: flex;
+	align-items: center;
+	// width: 100%;
+	max-width: 640px;
+	background: #ffffff;
+	border: 1px solid #e6e7eb;
+	border-radius: 10px;
+	padding: 6px 8px;
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
+	transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+:global(.search-bar:focus-within) {
+	border-color: #3b82f6;
+	box-shadow: 0 6px 18px rgba(59, 130, 246, 0.08);
+}
+
+:global(.search-input) {
+	flex: 1 1 auto;
+	border: none;
+	background: transparent;
+	padding: 10px 12px;
+	padding-right: 44px; /* space for clear button */
+	font-size: 1rem;
+	color: #111827;
+	outline: none;
+}
+
+:global(.search-input::placeholder) {
+	color: #9ca3af;
+	font-weight: 500;
+}
+
+:global(.clear-button) {
+	position: absolute;
+	right: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 9999px;
+	border: none;
+	background: transparent;
+	color: #6b7280;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+:global(.clear-button:hover) {
+	background: rgba(0, 0, 0, 0.04);
+	color: #111827;
+}
+
+:global(.clear-button:focus) {
+	outline: 2px solid rgba(59, 130, 246, 0.18);
+}
+
+:global(.search-bar.small) {
+	max-width: 360px;
+}
+
+:global(.search-bar.rounded) {
+	border-radius: 9999px;
+}
+
