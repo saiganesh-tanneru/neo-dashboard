@@ -1,6 +1,8 @@
-
-'use strict'
 const { toNeoModel } = require('../helper/neoModel')
+const NodeCache = require('node-cache')
+
+// Cache with 10 min TTL, check expired keys every 2 min
+const neoCache = new NodeCache({ stdTTL: 600, checkperiod: 120 })
 
 const NEO_API_KEY = process.env.NEO_API_KEY || 'DEMO_KEY'
 
@@ -43,6 +45,16 @@ module.exports = async function (fastify, opts) {
       return { error: 'Date range too large', message: 'maximum range is 7 days' }
     }
 
+    const cacheKey = `neo:${startDate}:${endDate}`
+    const cached = neoCache.get(cacheKey)
+
+    if (cached) {
+      return {
+        ...cached,
+        cached: true,
+      }
+    }
+
     const url = new URL('https://api.nasa.gov/neo/rest/v1/feed')
     url.searchParams.set('start_date', startDate)
     url.searchParams.set('end_date', endDate)
@@ -60,7 +72,13 @@ module.exports = async function (fastify, opts) {
 
     const feedJson = await res.json()
 
-    // Return a modeled, UI-friendly response instead of the raw nested JSON
-    return toNeoModel(feedJson, { startDate, endDate })
+    const modeledResponse = toNeoModel(feedJson, { startDate, endDate })
+
+    neoCache.set(cacheKey, modeledResponse)
+
+    return {
+      ...modeledResponse,
+      cached: false,
+    }
   })
 }
