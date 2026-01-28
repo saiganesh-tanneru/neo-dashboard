@@ -1,3 +1,4 @@
+
 export type NeoItem = {
     id: string;
     name: string;
@@ -23,4 +24,9 @@ export enum SortBy {
   Size = 'size',
   ClosenessToEarth = 'closenessToEarth',
   RelativeVelocity = 'relativeVelocity',
+}
+
+export type ErrorMessage = {
+    message: string;
+    error: string;
 }

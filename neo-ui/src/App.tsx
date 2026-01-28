@@ -5,13 +5,15 @@ import { SearchBar } from './components/search-bar/search-bar';
 import useFetch from './hooks/useFetch';
 import { CustomDatePicker } from './components/custom-datepicker/custom-datepicker';
 import SortDropdown from './components/sort-dropdown/sort-dropdown';
-import { NeoItem, SortBy } from './models/neoModel';
+import { ErrorMessage, NeoItem, SortBy } from './models/neoModel';
+
 
 function App() {
   const [selectedDate, setSelectedDate] = React.useState<string | null>(null);
   const [sortOption, setSortOption] = React.useState<SortBy >(SortBy.Name);
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [neoObjects, setNeoObjects] = React.useState<NeoItem[]>([]);
+  const [errorMessage, setErrorMessage] = React.useState<ErrorMessage | null>(null);
   
   const apiUrl = selectedDate
     ? `http://localhost:3000/?start_date=${encodeURIComponent(selectedDate)}&end_date=${encodeURIComponent(selectedDate)}`
@@ -21,8 +23,9 @@ function App() {
 
   useEffect(() => {
     if (loading || selectedDate === null) return
-    if (error) console.error('Error fetching status:', error)
+    if (error) setErrorMessage(error)
     if (neoData) {
+      setErrorMessage(null)
       setNeoObjects([...neoData.items]);
     }
   }, [neoData, loading, error, selectedDate])
@@ -89,6 +92,7 @@ function App() {
         <SearchBar value={searchQuery} onSearch={onSearch} />
         <SortDropdown value={sortOption}  onSelect={onSelectSort} />
       </div>
+      {errorMessage && <p style={{ color: 'red' }}>Error: {errorMessage.message}</p>}
       {neoObjects?.length > 0 && 
         neoObjects.map((neo: any) => (
           <NeoCard 
